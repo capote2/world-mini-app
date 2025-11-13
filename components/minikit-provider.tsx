@@ -5,7 +5,7 @@ import { ReactNode, useEffect } from "react";
 
 export default function MiniKitProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
-    MiniKit.install();
+    MiniKit.install("app_20a69bf928da734a591cc3df47f9674a");
     console.log(MiniKit.isInstalled());
   }, []);
 

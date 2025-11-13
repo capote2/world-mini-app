@@ -6,15 +6,16 @@ export const SignIn = () => {
   if (session) {
     return (
       <>
-        Signed in as {session?.user?.name?.slice(0, 10)} <br />
-        <button onClick={() => signOut()}>Sign out</button>
+        SESIÓN INICIADA COMO  {session?.user?.name?.slice(0, 10)} <br />
+        <button onClick={() => signOut()}>CERRAR SESIÓN</button>
       </>
     );
   } else {
     return (
       <>
-        Not signed in <br />
-        <button onClick={() => signIn()}>Sign in</button>
+        NO HAS INICIADO SESIÓN 
+        <br />
+        <button onClick={() => signIn()}>INICIAR SESIÓN</button>
       </>
     );
   }
