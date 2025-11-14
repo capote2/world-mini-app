@@ -25,18 +25,6 @@ export const VerifyBlock = () => {
   >(null);
 
   const handleVerify = useCallback(async () => {
-    // --- 1. MODO SIMULACIÓN (Para tu Mac) ---
-    if (!MiniKit.isInstalled()) {
-      console.warn("⚠️ MiniKit no detectado. Simulando verificación exitosa...");
-      setHandleVerifyResponse({
-        status: "success",
-        proof: "mock-proof-desarrollo",
-        merkle_root: "mock-root",
-        nullifier_hash: "mock-hash",
-        verification_level: VerificationLevel.Orb,
-      } as any);
-      return;
-    }
 
     // --- 2. MODO REAL (Para la App) ---
     const { finalPayload } = await MiniKit.commandsAsync.verify(verifyPayload);
