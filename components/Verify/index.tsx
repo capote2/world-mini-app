@@ -14,7 +14,7 @@ export type VerifyCommandInput = {
 };
 
 const verifyPayload: VerifyCommandInput = {
-  action: "test-action",
+  action: "verificar-humano",
   signal: "",
   verification_level: VerificationLevel.Orb,
 };
