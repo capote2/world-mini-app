@@ -17,7 +17,7 @@ export default function Home() {
     MiniKit.commands.verify({
       action: "verificar-humano",
       signal: "",
-      verification_level: "device" as any,
+      //verification_level: "device" as any,
     });
   };
 
