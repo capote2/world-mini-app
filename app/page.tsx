@@ -143,7 +143,7 @@ export default function Home() {
       <div className="mb-8 animate-fade-in">
         <Image src="/logo-pallium.png" alt="Logo Pallium" width={200} height={200} priority className="drop-shadow-xl" />
       </div>
-      <h1 className="text-5xl font-bold mb-4 text-center text-purple-600 tracking-tight">PALLIUM</h1>
+<h1 className="text-5xl font-bold mb-4 text-center text-purple-600 tracking-tight">PALLIUM 2.0</h1>
       <p className="text-gray-500 text-center mb-16 text-lg font-medium max-w-xs mx-auto">
         ¡Bienvenido a Pallium, tu compañero en World Chain!
       </p>
