@@ -4,8 +4,6 @@ import "./globals.css";
 import MiniKitProvider from "@/components/minikit-provider";
 import dynamic from "next/dynamic";
 
-// Hemos eliminado "NextAuthProvider" porque causaba conflictos y no se usa.
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -18,19 +16,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  
-  // Herramienta de depuración (solo visible en desarrollo)
   const ErudaProvider = dynamic(
     () => import("../components/Eruda").then((c) => c.ErudaProvider),
-    {
-      ssr: false,
-    }
+    { ssr: false }
   );
 
   return (
     <html lang="es">
       <body className={inter.className}>
-        {/* Eliminamos el bloqueo de NextAuth. Ahora la app respira. */}
         <ErudaProvider>
           <MiniKitProvider>
             {children}
