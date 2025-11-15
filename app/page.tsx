@@ -13,7 +13,7 @@ export default function Home() {
         height={150}
         priority
       />
-      <h1 className="text-2xl font-bold mb-4">Mi Primera Mini App</h1>
+      <h1 className="text-2xl font-bold mb-4">te damos la bienvenida a PALLIUM</h1>
       <SignIn />
       <VerifyBlock />
       <PayBlock />
