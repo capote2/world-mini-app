@@ -5,21 +5,33 @@ import { MiniKit, ResponseEvent } from "@worldcoin/minikit-js";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  // 1. MEMORIA: Estado para saber si el usuario está verificado y qué pestaña ve
+  // 1. MEMORIA: Estados para la verificación y la navegación
   const [isVerified, setIsVerified] = useState(false);
   const [activeTab, setActiveTab] = useState("home");
 
-  // 2. LÓGICA: Función para iniciar la verificación
+  // 2. LÓGICA CON DIAGNÓSTICO: Alertas para saber qué pasa
   const handleConnect = async () => {
+    // Alerta 1: Confirmamos que el clic funciona
+    alert("1. ¡Botón presionado!");
+
     if (!MiniKit.isInstalled()) {
-      console.warn("MiniKit no instalado");
+      // Alerta 2: Error de entorno
+      alert("2. ERROR: MiniKit no detectado. ¿Estás en World App?");
       return;
     }
-    MiniKit.commands.verify({
-      action: "verificar-humano",
-      signal: "",
-      // verification_level: "device" as any, // Mantenemos esto desactivado para evitar el error rojo
-    });
+
+    // Alerta 3: Todo listo para enviar comando
+    alert("3. MiniKit detectado. Enviando comando verificar...");
+
+    try {
+      MiniKit.commands.verify({
+        action: "verificar-humano",
+        signal: "",
+        // verification_level: "device" as any, // Dejamos esto comentado por seguridad
+      });
+    } catch (error) {
+      alert("4. Error grave al enviar comando: " + JSON.stringify(error));
+    }
   };
 
   // 3. ESCUCHA: Esperamos la respuesta de World ID
@@ -29,8 +41,9 @@ export default function Home() {
     MiniKit.subscribe(ResponseEvent.MiniAppVerifyAction, async (payload) => {
       if (payload.status === "error") {
         console.error("Error", payload);
+        alert("Error en la verificación: " + JSON.stringify(payload));
       } else {
-        // ¡ÉXITO! Activamos el interruptor para cambiar de pantalla
+        // ¡ÉXITO! Cambiamos la pantalla
         setIsVerified(true);
       }
     });
@@ -40,7 +53,7 @@ export default function Home() {
     };
   }, []);
 
-  // 4. PANTALLA B (LA APP REAL): Se muestra SOLO si isVerified es true
+  // 4. PANTALLA B (BILLETERA): Se muestra si isVerified es true
   if (isVerified) {
     return (
       <main className="flex min-h-screen flex-col bg-gray-50 justify-between">
@@ -55,20 +68,7 @@ export default function Home() {
                  <Image src="/logo-pallium.png" alt="Logo" width={80} height={80} className="rounded-full" />
                </div>
                <h2 className="text-2xl font-bold text-gray-800">Hola, Humano</h2>
-               <p className="text-gray-500 text-center mt-2">
-                 Bienvenido al ecosistema Pallium.
-               </p>
-               
-               <div className="mt-8 w-full grid grid-cols-2 gap-4">
-                 <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                   <h3 className="font-bold text-purple-600">Noticias</h3>
-                   <p className="text-xs text-gray-400 mt-1">Sin novedades</p>
-                 </div>
-                 <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                   <h3 className="font-bold text-purple-600">Estado</h3>
-                   <p className="text-xs text-green-500 mt-1">● Online</p>
-                 </div>
-               </div>
+               <p className="text-gray-500 text-center mt-2">Bienvenido al ecosistema Pallium.</p>
             </div>
           )}
 
@@ -96,23 +96,17 @@ export default function Home() {
           )}
         </div>
 
-        {/* MENÚ DE NAVEGACIÓN INFERIOR */}
+        {/* MENÚ INFERIOR */}
         <div className="bg-white border-t border-gray-200 pb-8 pt-4 px-6 flex justify-around shadow-[0_-10px_20px_rgba(0,0,0,0.05)]">
-          <button onClick={() => setActiveTab("home")} className={`flex flex-col items-center ${activeTab === "home" ? "text-purple-600" : "text-gray-400"}`}>
-            <span className="text-xs mt-1 font-medium">Inicio</span>
-          </button>
-          <button onClick={() => setActiveTab("wallet")} className={`flex flex-col items-center ${activeTab === "wallet" ? "text-purple-600" : "text-gray-400"}`}>
-            <span className="text-xs mt-1 font-medium">Billetera</span>
-          </button>
-          <button onClick={() => setActiveTab("profile")} className={`flex flex-col items-center ${activeTab === "profile" ? "text-purple-600" : "text-gray-400"}`}>
-            <span className="text-xs mt-1 font-medium">Perfil</span>
-          </button>
+          <button onClick={() => setActiveTab("home")} className={`flex flex-col items-center ${activeTab === "home" ? "text-purple-600" : "text-gray-400"}`}><span className="text-xs mt-1 font-medium">Inicio</span></button>
+          <button onClick={() => setActiveTab("wallet")} className={`flex flex-col items-center ${activeTab === "wallet" ? "text-purple-600" : "text-gray-400"}`}><span className="text-xs mt-1 font-medium">Billetera</span></button>
+          <button onClick={() => setActiveTab("profile")} className={`flex flex-col items-center ${activeTab === "profile" ? "text-purple-600" : "text-gray-400"}`}><span className="text-xs mt-1 font-medium">Perfil</span></button>
         </div>
       </main>
     );
   }
 
-  // 5. PANTALLA A (LOGIN): Se muestra por defecto al inicio
+  // 5. PANTALLA A (LOGIN): Pantalla inicial
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-12 bg-white">
       <div className="mb-8 animate-fade-in">
@@ -126,10 +120,6 @@ export default function Home() {
         onClick={handleConnect}
         className="w-full max-w-xs bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold py-5 px-8 rounded-2xl text-xl shadow-lg transform transition-all hover:scale-105 flex items-center justify-center gap-3"
       >
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M21 12V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V17C3 18.1046 3.89543 19 5 19H10" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-          <path d="M21 15H16C15.4477 15 15 15.4477 15 16V18C15 18.5523 15.4477 19 16 19H21C21.5523 19 22 18.5523 22 18V16C22 15.4477 21.5523 15 21 15Z" fill="white" fillOpacity="0.2" stroke="white" strokeWidth="2"/>
-        </svg>
         Conectar Billetera
       </button>
       <div className="absolute bottom-8 text-xs text-gray-400 font-medium">Powered by World Chain</div>
