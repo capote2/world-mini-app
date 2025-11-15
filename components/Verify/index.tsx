@@ -25,6 +25,7 @@ export const VerifyBlock = () => {
   >(null);
 
   const handleVerify = useCallback(async () => {
+    
 
     // --- 2. MODO REAL (Para la App) ---
     const { finalPayload } = await MiniKit.commandsAsync.verify(verifyPayload);
